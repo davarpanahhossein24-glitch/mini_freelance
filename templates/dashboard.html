@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}داشبورد{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+  <h2 class="text-2xl font-semibold mb-6">داشبورد من</h2>
+
+  <div class="grid md:grid-cols-2 gap-6">
+    <div class="bg-white rounded-lg shadow p-4">
+      <h3 class="text-lg font-medium mb-3 text-indigo-700">پروژه‌های من</h3>
+      {% if projects %}
+        <ul class="space-y-2">
+          {% for p in projects %}
+            <li class="border rounded p-2 hover:bg-gray-50 transition">
+              <strong>{{ p.title }}</strong><br>
+              <span class="text-sm text-gray-500">{{ p.description[:100] }}...</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-gray-500">هیچ پروژه‌ای هنوز ثبت نکردی.</p>
+      {% endif %}
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-4">
+      <h3 class="text-lg font-medium mb-3 text-indigo-700">پیشنهادات من</h3>
+      {% if bids %}
+        <ul class="space-y-2">
+          {% for b in bids %}
+            <li class="border rounded p-2 hover:bg-gray-50 transition">
+              <strong>{{ b.project.title }}</strong> — {{ b.amount }} تومان
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-gray-500">هیچ پیشنهادی هنوز ثبت نکردی.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

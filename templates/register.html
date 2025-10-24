@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}ثبت‌نام{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 rounded shadow">
+  <h3 class="text-xl font-semibold mb-4">ثبت‌نام</h3>
+  <form method="post">
+    <label class="block mb-2">نام کاربری
+      <input name="username" class="w-full mt-1 p-2 border rounded" required>
+    </label>
+    <label class="block mb-2">نام نمایشی
+      <input name="display_name" class="w-full mt-1 p-2 border rounded">
+    </label>
+    <label class="block mb-2">ایمیل
+      <input name="email" type="email" class="w-full mt-1 p-2 border rounded" required>
+    </label>
+    <label class="block mb-4">رمز عبور
+      <input name="password" type="password" class="w-full mt-1 p-2 border rounded" required>
+    </label>
+    <button class="w-full py-2 bg-indigo-600 text-white rounded">ساخت حساب</button>
+  </form>
+  <p class="mt-4 text-sm">قبلاً عضو شده‌اید؟ <a href="{{ url_for('login') }}" class="text-indigo-600">ورود</a></p>
+</div>
+{% endblock %}

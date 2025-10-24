@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}{{ project.title }}{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto grid md:grid-cols-3 gap-6">
+  <div class="md:col-span-2 bg-white p-5 rounded shadow">
+    <h2 class="text-2xl font-semibold">{{ project.title }}</h2>
+    <p class="text-sm text-gray-500 mt-1">توسط <a href="{{ url_for('profile', user_id=project.owner.id) }}" class="text-indigo-600">{{ project.owner.display_name or project.owner.username }}</a> — {{ project.created_at.strftime('%Y-%m-%d') }}</p>
+
+    {% if project.image %}
+      <img src="{{ url_for('uploaded_file', filename=project.image) }}" class="w-full h-64 object-cover rounded mt-4" alt="">
+    {% endif %}
+
+    <div class="mt-4 text-gray-700">
+      {{ project.description | nl2br }}
+    </div>
+
+    <div class="mt-6">
+      <h4 class="font-semibold">پیشنهادها</h4>
+      <div class="space-y-3 mt-3">
+        {% for bid in project.bids %}
+          <div class="p-3 rounded border flex items-start justify-between">
+            <div>
+              <div class="font-semibold">{{ bid.bidder.display_name or bid.bidder.username }}</div>
+              <div class="text-sm text-gray-600">{{ bid.message }}</div>
+              <div class="text-xs text-gray-400 mt-1">{{ bid.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
+            </div>
+            <div class="text-right">
+              <div class="font-semibold text-indigo-600">{{ bid.price }} تومان</div>
+              {% if current_user.is_authenticated and current_user.id == project.owner_id %}
+                  <form method="post" action="{{ url_for('accept_bid', project_id=project.id, bid_id=bid.id) }}">
+                    <button class="mt-2 px-3 py-1 bg-green-600 text-white rounded text-sm">انتخاب</button>
+                  </form>
+              {% endif %}
+              {% if bid.accepted %}
+                <div class="mt-2 text-sm text-green-600">پذیرفته شد</div>
+              {% endif %}
+            </div>
+          </div>
+        {% else %}
+          <div class="text-sm text-gray-500">هنوز پیشنهادی ثبت نشده</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <aside class="bg-white p-5 rounded shadow">
+    <div class="text-sm text-gray-500">بودجه</div>
+    <div class="text-lg font-semibold mt-1">{{ project.budget or 'توافقی' }}</div>
+
+    {% if current_user.is_authenticated %}
+      {% if current_user.id != project.owner_id %}
+        <form class="mt-6" method="post" action="{{ url_for('place_bid', project_id=project.id) }}">
+          <label class="block mb-2">قیمت پیشنهادی (تومان)
+            <input name="price" class="w-full mt-1 p-2 border rounded" required>
+          </label>
+          <label class="block mb-2">پیام
+            <textarea name="message" rows="4" class="w-full mt-1 p-2 border rounded"></textarea>
+          </label>
+          <button class="w-full py-2 bg-indigo-600 text-white rounded">ارسال پیشنهاد</button>
+        </form>
+      {% else %}
+        <div class="mt-6 text-sm text-gray-600">این پروژه را شما منتشر کرده‌اید.</div>
+      {% endif %}
+    {% else %}
+      <div class="mt-6 text-sm">برای ارسال پیشنهاد <a class="text-indigo-600" href="{{ url_for('login') }}">وارد شوید</a>.</div>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}

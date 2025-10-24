@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{% block title %}پلتفرم فریلنسری کوچک{% endblock %}</title>
+
+  <!-- Tailwind Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    /* انیمیشن همبرگر به ضربدر */
+    .burger span {
+      display: block;
+      height: 2px;
+      width: 25px;
+      margin: 5px auto;
+      background-color: #333;
+      transition: all 0.3s ease-in-out;
+    }
+    .burger.open span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    .burger.open span:nth-child(2) {
+      opacity: 0;
+    }
+    .burger.open span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+    /* انیمیشن منوی موبایل */
+    #mobileMenu {
+      transition: all 0.3s ease-in-out;
+      transform-origin: top right;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col font-sans">
+
+  <header class="bg-white shadow-md sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="{{ url_for('index') }}" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center text-white font-bold text-lg">F</div>
+        <div>
+          <h1 class="text-lg font-semibold text-gray-800">FreelanceMini</h1>
+          <p class="text-xs text-gray-500">پلتفرم نمونه‌کار فریلنسری</p>
+        </div>
+      </a>
+
+      <nav class="flex items-center gap-3 relative">
+        <!-- منوی دسکتاپ -->
+        <div class="hidden md:flex items-center gap-4">
+          <a href="{{ url_for('index') }}" class="px-4 py-2 rounded-md hover:bg-gray-100 transition">خانه</a>
+          <a href="{{ url_for('dashboard') }}" class="px-4 py-2 rounded-md hover:bg-gray-100 transition">داشبورد</a>
+          <a href="{{ url_for('new_project') }}" class="px-4 py-2 rounded-md hover:bg-gray-100 transition">پروژه‌ها</a>
+          <a href="{{ url_for('contact') }}" class="px-4 py-2 rounded-md hover:bg-gray-100 transition">تماس با ما</a>
+          <a href="{{ url_for('about') }}" class="px-4 py-2 rounded-md hover:bg-gray-100 transition">درباره ما</a>
+          <a href="{{ url_for('about') }}" class="px-4 py-2 rounded-md hover:bg-gray-100 transition">سوالات متداول</a>
+          <!-- گزینه‌های ورود و ثبت‌نام -->
+          <a href="{{ url_for('login') }}" class="px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600 transition">ورود</a>
+          <a href="{{ url_for('register') }}" class="px-4 py-2 rounded-md border border-blue-500 text-blue-500 hover:bg-blue-50 transition">ثبت‌نام</a>
+        </div>
+
+        <!-- منوی موبایل -->
+        <div class="md:hidden relative">
+          <button id="burger" class="burger flex flex-col justify-center items-center w-10 h-10 focus:outline-none">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <div id="mobileMenu" class="absolute top-12 right-0 bg-white shadow-lg rounded-lg w-48 flex flex-col items-start p-3 gap-2 opacity-0 scale-95 pointer-events-none">
+            <a href="{{ url_for('index') }}" class="w-full px-3 py-2 rounded hover:bg-gray-100 transition">خانه</a>
+            <a href="{{ url_for('dashboard') }}" class="w-full px-3 py-2 rounded hover:bg-gray-100 transition">داشبورد</a>
+            <a href="{{ url_for('new_project') }}" class="w-full px-3 py-2 rounded hover:bg-gray-100 transition">پروژه‌ها</a>
+            <a href="{{ url_for('contact') }}" class="w-full px-3 py-2 rounded hover:bg-gray-100 transition">تماس با ما</a>
+            <a href="{{ url_for('about') }}" class="w-full px-3 py-2 rounded hover:bg-gray-100 transition">درباره ما</a>
+            <a href="{{ url_for('about') }}" class="w-full px-3 py-2 rounded hover:bg-gray-100 transition">سوالات متداول</a>
+            <!-- ورود و ثبت‌نام موبایل -->
+            <a href="{{ url_for('login') }}" class="w-full px-3 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 transition">ورود</a>
+            <a href="{{ url_for('register') }}" class="w-full px-3 py-2 rounded border border-blue-500 text-blue-500 hover:bg-blue-50 transition">ثبت‌نام</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-8 flex-1">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="space-y-2 mb-6">
+          {% for category, msg in messages %}
+            <div class="px-4 py-2 rounded-md
+              {{ 'bg-green-100 text-green-800' if category=='success' else
+                 ('bg-red-100 text-red-800' if category=='danger' else
+                 ('bg-yellow-100 text-yellow-800' if category=='warning' else
+                 'bg-blue-100 text-blue-800')) }}">
+              {{ msg }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="bg-white border-t mt-8">
+    <div class="container mx-auto px-4 py-4 text-sm text-gray-500 text-center">
+      © ساخته‌شده با ❤️ — نمونه‌کار Flask
+    </div>
+  </footer>
+
+  <script>
+    const burger = document.getElementById('burger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    burger.addEventListener('click', () => {
+      burger.classList.toggle('open');
+      if (mobileMenu.classList.contains('opacity-0')) {
+        mobileMenu.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+        mobileMenu.classList.add('opacity-100', 'scale-100');
+      } else {
+        mobileMenu.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+        mobileMenu.classList.remove('opacity-100', 'scale-100');
+      }
+    });
+  </script>
+</body>
+</html>
