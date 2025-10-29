@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>{% block title %}پلتفرم فریلنسری کوچک{% endblock %}</title>
 
   <!-- Tailwind Play CDN -->
@@ -10,10 +10,17 @@
 
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <style>
+    body {
+      overflow-x: hidden; /* جلوگیری از اسکرول افقی */
+    }
+    .container {
+      max-width: 100%;
+    }
+
     /* انیمیشن همبرگر به ضربدر */
     .burger span {
       display: block;
-      height: 2px;
+      height: 3px; /* کمی ضخیم‌تر برای بهتر دیده شدن */
       width: 25px;
       margin: 5px auto;
       background-color: #333;
@@ -28,10 +35,17 @@
     .burger.open span:nth-child(3) {
       transform: rotate(-45deg) translate(5px, -5px);
     }
+
     /* انیمیشن منوی موبایل */
     #mobileMenu {
       transition: all 0.3s ease-in-out;
       transform-origin: top right;
+      width: 80vw;       /* عرض منو در موبایل */
+      max-width: 250px;  /* حداکثر عرض */
+      right: 1rem;       /* فاصله از راست */
+      pointer-events: none;
+      opacity: 0;
+      scale: 0.95;
     }
   </style>
 </head>
@@ -56,7 +70,6 @@
           <a href="{{ url_for('contact') }}" class="px-4 py-2 rounded-md hover:bg-gray-100 transition">تماس با ما</a>
           <a href="{{ url_for('about') }}" class="px-4 py-2 rounded-md hover:bg-gray-100 transition">درباره ما</a>
           <a href="{{ url_for('about') }}" class="px-4 py-2 rounded-md hover:bg-gray-100 transition">سوالات متداول</a>
-          <!-- گزینه‌های ورود و ثبت‌نام -->
           <a href="{{ url_for('login') }}" class="px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600 transition">ورود</a>
           <a href="{{ url_for('register') }}" class="px-4 py-2 rounded-md border border-blue-500 text-blue-500 hover:bg-blue-50 transition">ثبت‌نام</a>
         </div>
@@ -68,14 +81,13 @@
             <span></span>
             <span></span>
           </button>
-          <div id="mobileMenu" class="absolute top-12 right-0 bg-white shadow-lg rounded-lg w-48 flex flex-col items-start p-3 gap-2 opacity-0 scale-95 pointer-events-none">
+          <div id="mobileMenu" class="absolute top-12 bg-white shadow-lg rounded-lg flex flex-col items-start p-3 gap-2">
             <a href="{{ url_for('index') }}" class="w-full px-3 py-2 rounded hover:bg-gray-100 transition">خانه</a>
             <a href="{{ url_for('dashboard') }}" class="w-full px-3 py-2 rounded hover:bg-gray-100 transition">داشبورد</a>
             <a href="{{ url_for('new_project') }}" class="w-full px-3 py-2 rounded hover:bg-gray-100 transition">پروژه‌ها</a>
             <a href="{{ url_for('contact') }}" class="w-full px-3 py-2 rounded hover:bg-gray-100 transition">تماس با ما</a>
             <a href="{{ url_for('about') }}" class="w-full px-3 py-2 rounded hover:bg-gray-100 transition">درباره ما</a>
             <a href="{{ url_for('about') }}" class="w-full px-3 py-2 rounded hover:bg-gray-100 transition">سوالات متداول</a>
-            <!-- ورود و ثبت‌نام موبایل -->
             <a href="{{ url_for('login') }}" class="w-full px-3 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 transition">ورود</a>
             <a href="{{ url_for('register') }}" class="w-full px-3 py-2 rounded border border-blue-500 text-blue-500 hover:bg-blue-50 transition">ثبت‌نام</a>
           </div>
